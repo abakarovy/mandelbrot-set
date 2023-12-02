@@ -32,7 +32,7 @@ def mandel():
             g = color
             b = color
             draw.point([x,y], (int(r), int(g), int(b)))
-            print(f"{x*y} {(x/width)*100}%", end="\r")
+            print(f"{(x/width)*100}%", end="\r")
 
 start = time.time()
 
@@ -40,6 +40,6 @@ mandel()
 
 end = time.time()
 
-print((end - start)/60, " minutes")
+print(f"generation took {(end - start)/60} minutes")
 
 img.show()
