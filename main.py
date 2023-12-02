@@ -4,8 +4,8 @@ from mandelbrot import mandelbrot, max_iters
 
 #28800 22400
 
-width = int(512)
-height = int(512)
+width = int(512*2)
+height = int(512*2)
 
 re_start = -2 #real
 re_end = 1
@@ -14,7 +14,7 @@ im_end = 1
 
 palette = []
 
-img = Image.new("RGB", (width, height), (0,0,0))
+img = Image.new("HSV", (width, height), (0,0,0))
 draw = ImageDraw.Draw(img)
 
 def mandel():    
@@ -24,14 +24,17 @@ def mandel():
             c = complex(re_start + (x / width) * (re_end - re_start), 
                         im_start + (y / height) *(im_end - im_start))
             m = mandelbrot(c)
-            if m:
-                color = 255 - int(m * 255/max_iters) 
-            else:
-                color = 0 
-            r = color
-            g = color
-            b = color
-            draw.point([x,y], (int(r), int(g), int(b)))
+
+            hue = int(255 * m / max_iters)
+            saturation = 255
+            value = 255 if m < max_iters else 0
+
+            # r = int(hue)
+            # g = int(saturation)
+            # b = int(value)
+
+            pointColor = (hue, saturation, value)
+            draw.point([x,y], pointColor)
             print(f"{(x/width)*100}%", end="\r")
 
 start = time.time()
@@ -42,4 +45,4 @@ end = time.time()
 
 print(f"generation took {(end - start)/60} minutes")
 
-img.show()
+img.convert("RGB").show()
