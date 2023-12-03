@@ -5,14 +5,12 @@ from mandelbrot import mandelbrot, max_iters
 #28800 22400
 
 width = int(512*2)
-height = int(512*2)
+height = int(512)
 
 re_start = -2 #real
-re_end = 1
+re_end = 1/2
 im_start = -1 #imaginary
-im_end = 1 
-
-palette = []
+im_end = 1
 
 img = Image.new("HSV", (width, height), (0,0,0))
 draw = ImageDraw.Draw(img)
@@ -23,10 +21,11 @@ def mandel():
 
             c = complex(re_start + (x / width) * (re_end - re_start), 
                         im_start + (y / height) *(im_end - im_start))
+            
             m = mandelbrot(c)
 
             hue = int(255 * m / max_iters)
-            saturation = 255
+            saturation = 127
             value = 255 if m < max_iters else 0
 
             # r = int(hue)

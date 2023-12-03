@@ -1,6 +1,6 @@
 from math import log, log2
 
-max_iters = 40
+max_iters = 30
 
 def mandelbrot(c):
     z = 0
