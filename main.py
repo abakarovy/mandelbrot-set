@@ -26,10 +26,6 @@ def mandel():
             saturation = 127
             value = 255 if m < max_iters else 0
 
-            # r = int(hue)
-            # g = int(saturation)
-            # b = int(value)
-
             pointColor = (hue, saturation, value)
             draw.point([x,y], pointColor)
             print(f"{(x/width)*100}%", end="\r")
