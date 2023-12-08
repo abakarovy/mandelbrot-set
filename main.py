@@ -2,8 +2,6 @@ from PIL import Image, ImageDraw
 import time
 from mandelbrot import mandelbrot, max_iters
 
-#28800 22400
-
 width = int(512*2)
 height = int(512)
 
