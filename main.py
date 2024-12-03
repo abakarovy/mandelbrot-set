@@ -1,9 +1,16 @@
 from PIL import Image, ImageDraw
 import time
+import sys
 from mandelbrot import mandelbrot, max_iters
 
-width = int(512*2)
-height = int(512)
+args = sys.argv
+if len(args) > 3:
+    raise Exception(f"expected 2 arguments, got {len(args)}")
+
+width, height = int(args[1]), int(args[2])
+
+if not width > 0 and not height > 0:
+    raise Exception(f"Expected integer values larger than 0")
 
 re_start = -2 #real
 re_end = 1/2
