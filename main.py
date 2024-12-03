@@ -1,48 +1,31 @@
-from PIL import Image, ImageDraw
-import time
-import sys
-from mandelbrot import mandelbrot, max_iters
+from matplotlib import pyplot as plt
+from matplotlib.widgets import Button
+import numpy as np
 
-args = sys.argv
-if len(args) > 3:
-    raise Exception(f"expected 2 arguments, got {len(args)}")
+max_iter = 4096
+width = 2048
+height = 1024
+center = -1.1195+0.2718j
+extent = 0.005+0.005j
+scale = max((extent / width).real, (extent / height).imag)
 
-width, height = int(args[1]), int(args[2])
+result = np.zeros((height, width), int)
+for j in range(height):
+    for i in range(width):
+        c = center + (i - width // 2 + (j - height // 2)*1j) * scale
+        z = 0
+        for k in range(max_iter):
+            z = z**2 + c
+            if (z * z.conjugate()).real > 4.0:
+                break
+        result[j, i] = k
 
-if not width > 0 and not height > 0:
-    raise Exception(f"Expected integer values larger than 0")
+fig, ax = plt.subplots(1, 1, figsize=(10, 10))
+plot_extent = (width + 1j * height) * scale
+z1 = center - plot_extent / 2
+z2 = z1 + plot_extent
+ax.imshow(result**(1/3), origin='lower', extent=(z1.real, z2.real, z1.imag, z2.imag))
+ax.set_xlabel("Re(c)")
+ax.set_ylabel("Im(c)")
 
-re_start = -2 #real
-re_end = 1/2
-im_start = -1 #imaginary
-im_end = 1
-
-img = Image.new("HSV", (width, height), (0,0,0))
-draw = ImageDraw.Draw(img)
-
-def mandel():    
-    for x in range(0, width):
-        for y in range(0, height):
-
-            c = complex(re_start + (x / width) * (re_end - re_start), 
-                        im_start + (y / height) *(im_end - im_start))
-            
-            m = mandelbrot(c)
-
-            hue = int(255 * m / max_iters)
-            saturation = 127
-            value = 255 if m < max_iters else 0
-
-            pointColor = (hue, saturation, value)
-            draw.point([x,y], pointColor)
-            print(f"{(x/width)*100}%", end="\r")
-
-start = time.time()
-
-mandel()
-
-end = time.time()
-
-print(f"generation took {(end - start)/60} minutes")
-
-img.convert("RGB").show()
+plt.show()
